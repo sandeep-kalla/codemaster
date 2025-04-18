@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
@@ -34,7 +36,7 @@ try {
 // Run the build command
 try {
   console.log('Running build command...');
-  execSync('npm run vercel-build', { stdio: 'inherit' });
+  execSync('npm run build', { stdio: 'inherit' });
   console.log('Build completed successfully!');
 } catch (error) {
   console.error('Build failed:', error.message);
@@ -45,7 +47,7 @@ try {
 try {
   const distExists = fs.existsSync(path.join(process.cwd(), 'dist'));
   console.log('dist directory exists:', distExists);
-
+  
   if (distExists) {
     // List files in the dist directory
     const distFiles = fs.readdirSync(path.join(process.cwd(), 'dist'));

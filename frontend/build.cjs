@@ -1,11 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
+#!/usr/bin/env node
 
-// Get the current file path and directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 // Log the current directory
 console.log('Current directory:', process.cwd());
@@ -34,7 +31,7 @@ try {
 // Run the build command
 try {
   console.log('Running build command...');
-  execSync('npm run vercel-build', { stdio: 'inherit' });
+  execSync('npm run build', { stdio: 'inherit' });
   console.log('Build completed successfully!');
 } catch (error) {
   console.error('Build failed:', error.message);
@@ -45,7 +42,7 @@ try {
 try {
   const distExists = fs.existsSync(path.join(process.cwd(), 'dist'));
   console.log('dist directory exists:', distExists);
-
+  
   if (distExists) {
     // List files in the dist directory
     const distFiles = fs.readdirSync(path.join(process.cwd(), 'dist'));

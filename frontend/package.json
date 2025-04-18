@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "deploy": "vercel --prod",
     "deploy:dev": "vercel",
-    "vercel-build": "vite build"
+    "vercel-build": "vite build",
+    "vercel-build:cjs": "node build.cjs",
+    "vercel-build:mjs": "node vercel.build.mjs"
   },
   "dependencies": {
     "axios": "^1.8.4",
