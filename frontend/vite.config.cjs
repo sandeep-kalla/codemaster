@@ -21,7 +21,6 @@ module.exports = {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['react-split-pane', 'recharts'],
         },
       },
     },
@@ -35,7 +34,7 @@ module.exports = {
     },
   },
   optimizeDeps: {
-    include: ['react-hot-toast', 'firebase', 'axios', 'prismjs', 'react-split-pane', 'recharts'],
+    include: ['react-hot-toast', 'firebase', 'axios', 'prismjs'],
   },
   server: {
     port: 5173,

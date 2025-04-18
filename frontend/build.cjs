@@ -73,6 +73,22 @@ try {
     );
   }
 
+  // Rename the App.css file to App.original.css
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.css'),
+      path.join(process.cwd(), 'src', 'App.original.css')
+    );
+  }
+
+  // Copy the simplified App.css file to App.css
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.simple.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.simple.css'),
+      path.join(process.cwd(), 'src', 'App.css')
+    );
+  }
+
   console.log('Temporary entry point created successfully!');
 } catch (error) {
   console.error('Failed to create temporary entry point:', error.message);
@@ -126,6 +142,16 @@ try {
     );
     // Delete the temporary file
     fs.unlinkSync(path.join(process.cwd(), 'src', 'index.original.css'));
+  }
+
+  // Restore the original App.css file
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.original.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.original.css'),
+      path.join(process.cwd(), 'src', 'App.css')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'App.original.css'));
   }
 
   console.log('Original files restored successfully!');
