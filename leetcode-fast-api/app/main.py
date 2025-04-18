@@ -26,28 +26,14 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configure CORS
-allow_origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-    "https://codemaster-app.vercel.app",  # Add your Vercel frontend domain
-    "https://codemaster-app-*.vercel.app",  # For preview deployments
-    "https://*.vercel.app"  # Allow all Vercel deployments
-]
-
-# Allow all origins in development mode or Vercel deployment
-if os.environ.get("VERCEL_ENV") == "development" or os.environ.get("VERCEL_DEPLOYMENT") == "1":
-    allow_origins = ["*"]
-
+# Configure CORS - Allow all origins for Vercel deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allow_origins,
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins for now to debug the issue
+    allow_credentials=False,  # Set to False when using allow_origins=["*"]
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],  # Allows all headers
-    expose_headers=["set-cookie", "Content-Type", "Authorization"],
+    expose_headers=["Content-Type", "Authorization"],
 )
 
 # Include routers

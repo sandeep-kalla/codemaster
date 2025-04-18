@@ -6,8 +6,36 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  withCredentials: true, // Include cookies in requests
+  withCredentials: false, // Changed to false to match backend CORS settings
+  timeout: 10000, // 10 second timeout
 });
+
+// Add request interceptor for debugging
+api.interceptors.request.use(config => {
+  console.log('Making request to:', config.url);
+  return config;
+});
+
+// Add response interceptor for debugging
+api.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    console.error('API Error:', error.message);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Error data:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('No response received:', error.request);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // API functions for problems
 export const problemsApi = {
@@ -88,9 +116,7 @@ export const problemsApi = {
   // Run code for a problem
   runCode: async (titleSlug, codeData) => {
     try {
-      const response = await api.post(`/run-code/${titleSlug}`, codeData, {
-        withCredentials: true // Include cookies
-      });
+      const response = await api.post(`/run-code/${titleSlug}`, codeData);
       return response.data;
     } catch (error) {
       console.error(`Error running code for problem ${titleSlug}:`, error);
@@ -101,9 +127,7 @@ export const problemsApi = {
   // Check run code result
   checkRunResult: async (interpretId) => {
     try {
-      const response = await api.get(`/run-code/check/${interpretId}`, {
-        withCredentials: true // Include cookies
-      });
+      const response = await api.get(`/run-code/check/${interpretId}`);
       return response.data;
     } catch (error) {
       console.error(`Error checking run result for ${interpretId}:`, error);
@@ -114,9 +138,7 @@ export const problemsApi = {
   // Submit code for a problem
   submitCode: async (titleSlug, codeData) => {
     try {
-      const response = await api.post(`/submit/${titleSlug}`, codeData, {
-        withCredentials: true // Include cookies
-      });
+      const response = await api.post(`/submit/${titleSlug}`, codeData);
       return response.data;
     } catch (error) {
       console.error(`Error submitting code for problem ${titleSlug}:`, error);
@@ -127,9 +149,7 @@ export const problemsApi = {
   // Check submission result
   checkSubmission: async (submissionId) => {
     try {
-      const response = await api.get(`/submissions/${submissionId}/check`, {
-        withCredentials: true // Include cookies
-      });
+      const response = await api.get(`/submissions/${submissionId}/check`);
       return response.data;
     } catch (error) {
       console.error(`Error checking submission result for ${submissionId}:`, error);

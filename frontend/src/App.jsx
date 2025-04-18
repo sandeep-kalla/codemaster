@@ -8,6 +8,7 @@ import ProblemDetailPage from './components/ProblemDetailPage'
 import AuthPage from './components/AuthPage'
 import ForgotPassword from './components/ForgotPassword'
 import ProfilePage from './components/ProfilePage'
+import ApiTester from './components/ApiTester'
 import MainLayout from './components/MainLayout'
 import FullScreenLayout from './components/FullScreenLayout'
 import './components/LandingPage.css'
@@ -18,6 +19,7 @@ import './components/AuthPage.css'
 import './components/ForgotPassword.css'
 import './components/ProfilePage.css'
 import './components/Footer.css'
+import './components/ApiTester.css'
 
 function App() {
   return (
@@ -63,6 +65,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/api-tester" element={<ApiTester />} />
         </Route>
       </Routes>
     </Router>
