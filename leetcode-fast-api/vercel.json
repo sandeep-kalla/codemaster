@@ -1,51 +1,39 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python3.9",
-        "buildCommand": "chmod +x vercel-build.sh && ./vercel-build.sh"
-      }
+      "src": "run.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.py"
+      "dest": "run.py"
     },
     {
       "src": "/docs",
-      "dest": "/api/index.py"
+      "dest": "run.py"
     },
     {
       "src": "/redoc",
-      "dest": "/api/index.py"
+      "dest": "run.py"
     },
     {
       "src": "/openapi.json",
-      "dest": "/api/index.py"
+      "dest": "run.py"
     },
     {
       "src": "/static/(.*)",
-      "dest": "/app/static/$1"
+      "dest": "app/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/api/index.py"
+      "dest": "run.py"
     }
   ],
   "env": {
     "APP_MODULE": "app.main:app",
     "PYTHONPATH": ".",
     "VERCEL_DEPLOYMENT": "1"
-  },
-  "regions": ["iad1"],
-  "functions": {
-    "api/index.py": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
   }
 }

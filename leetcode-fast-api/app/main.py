@@ -33,11 +33,12 @@ allow_origins = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
     "https://codemaster-app.vercel.app",  # Add your Vercel frontend domain
-    "https://codemaster-app-*.vercel.app"  # For preview deployments
+    "https://codemaster-app-*.vercel.app",  # For preview deployments
+    "https://*.vercel.app"  # Allow all Vercel deployments
 ]
 
-# Allow all origins in development mode
-if os.environ.get("VERCEL_ENV") == "development":
+# Allow all origins in development mode or Vercel deployment
+if os.environ.get("VERCEL_ENV") == "development" or os.environ.get("VERCEL_DEPLOYMENT") == "1":
     allow_origins = ["*"]
 
 app.add_middleware(
