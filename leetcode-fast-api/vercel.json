@@ -1,44 +1,27 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "run.py",
       "use": "@vercel/python"
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/run.py" },
+    { "source": "/docs", "destination": "/run.py" },
+    { "source": "/redoc", "destination": "/run.py" },
+    { "source": "/openapi.json", "destination": "/run.py" },
+    { "source": "/static/:path*", "destination": "/app/static/:path*" },
+    { "source": "/(.*)", "destination": "/run.py" }
+  ],
+  "headers": [
     {
-      "src": "/api/(.*)",
-      "dest": "run.py",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization"
-      }
-    },
-    {
-      "src": "/docs",
-      "dest": "run.py"
-    },
-    {
-      "src": "/redoc",
-      "dest": "run.py"
-    },
-    {
-      "src": "/openapi.json",
-      "dest": "run.py"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "app/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "run.py",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization"
-      }
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+      ]
     }
   ],
   "env": {
