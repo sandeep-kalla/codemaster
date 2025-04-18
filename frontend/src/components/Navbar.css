@@ -1,0 +1,91 @@
+/* Navbar Styles */
+.daily-challenge-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 12px;
+  border-radius: 50%;
+  position: relative;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.daily-challenge-btn:hover {
+  background-color: rgba(139, 92, 246, 0.1);
+}
+
+/* Enhanced hover effect for completed daily challenge */
+.daily-challenge-completed:hover {
+  background-color: rgba(192, 132, 252, 0.15);
+}
+
+.daily-challenge-completed:hover .flame-icon {
+  filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.9))
+    drop-shadow(0 0 15px rgba(192, 132, 252, 0.7));
+  transform: scale(1.1);
+}
+
+.daily-challenge-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Loading state - prevent any transitions or animations */
+.daily-challenge-btn.loading {
+  pointer-events: none;
+}
+
+.daily-challenge-btn.loading .flame-icon,
+.daily-challenge-btn.loading .streak-counter {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Flame icon styles */
+.flame-icon {
+  color: #8b5cf6;
+  transition: color 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Glow effect for completed daily challenge */
+.daily-challenge-completed .flame-icon {
+  color: #c084fc;
+  filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.8))
+    drop-shadow(0 0 12px rgba(192, 132, 252, 0.6));
+  /* Enhanced steady glow with multiple drop shadows */
+  transform: scale(1.05); /* Slightly larger to emphasize completion */
+}
+
+/* Streak counter */
+.streak-counter {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #8b5cf6;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.daily-challenge-completed .streak-counter {
+  background-color: #c084fc;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.8),
+    0 0 12px rgba(192, 132, 252, 0.6);
+  /* Enhanced steady glow for the counter */
+  transform: scale(1.05); /* Slightly larger to emphasize completion */
+}
+
+/* We've removed the pulse animation in favor of a steady glow */

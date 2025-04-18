@@ -1,0 +1,17 @@
+{
+  "name": "CodeMaster",
+  "short_name": "CodeMaster",
+  "description": "Enhance your coding skills with algorithmic challenges and daily practice",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1E1E2E",
+  "theme_color": "#8B5CF6",
+  "icons": [
+    {
+      "src": "/code-icon.svg",
+      "sizes": "32x32 64x64 128x128 256x256",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

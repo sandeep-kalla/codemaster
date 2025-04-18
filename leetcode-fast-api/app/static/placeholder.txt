@@ -1,0 +1,1 @@
+This directory is used to serve static files for the FastAPI application.
