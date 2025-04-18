@@ -17,7 +17,7 @@ module.exports = {
     sourcemap: false,
     minify: true,
     rollupOptions: {
-      external: [],
+      external: ['react-split-pane', 'react-hot-toast'],
       output: {
         manualChunks: function(id) {
           // Create a vendors chunk for node_modules

@@ -31,14 +31,14 @@ try {
 // Install specific dependencies that might be causing issues
 try {
   console.log('Installing specific dependencies...');
-  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 react-hot-toast@2.4.1 postcss@8.4.31 react-split-pane@0.1.92 recharts@2.10.3 --save', { stdio: 'inherit' });
+  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 react-hot-toast@2.4.1 postcss@8.4.31 recharts@2.10.3 --save --force', { stdio: 'inherit' });
   console.log('Dependencies installed successfully!');
 } catch (error) {
   console.error('Dependency installation failed:', error.message);
   // Continue anyway
 }
 
-// Skip using simplified files for production build
+// Use deployment versions of files for production build
 try {
   console.log('Preparing for production build...');
 
@@ -63,6 +63,54 @@ try {
       fs.writeFileSync(path.join(process.cwd(), 'src', 'index.css'), modifiedContent);
 
       console.log('Modified index.css created successfully!');
+    }
+  }
+
+  // Backup and replace App.jsx with the deployment version
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.jsx'),
+      path.join(process.cwd(), 'src', 'App.original.jsx')
+    );
+
+    if (fs.existsSync(path.join(process.cwd(), 'src', 'App.deploy.jsx'))) {
+      fs.copyFileSync(
+        path.join(process.cwd(), 'src', 'App.deploy.jsx'),
+        path.join(process.cwd(), 'src', 'App.jsx')
+      );
+      console.log('Deployment version of App.jsx copied successfully!');
+    }
+  }
+
+  // Backup and replace App.css with the deployment version
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.css'),
+      path.join(process.cwd(), 'src', 'App.original.css')
+    );
+
+    if (fs.existsSync(path.join(process.cwd(), 'src', 'App.deploy.css'))) {
+      fs.copyFileSync(
+        path.join(process.cwd(), 'src', 'App.deploy.css'),
+        path.join(process.cwd(), 'src', 'App.css')
+      );
+      console.log('Deployment version of App.css copied successfully!');
+    }
+  }
+
+  // Backup and replace main.jsx with the deployment version
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'main.jsx'),
+      path.join(process.cwd(), 'src', 'main.original.jsx')
+    );
+
+    if (fs.existsSync(path.join(process.cwd(), 'src', 'main.deploy.jsx'))) {
+      fs.copyFileSync(
+        path.join(process.cwd(), 'src', 'main.deploy.jsx'),
+        path.join(process.cwd(), 'src', 'main.jsx')
+      );
+      console.log('Deployment version of main.jsx copied successfully!');
     }
   }
 
@@ -135,6 +183,39 @@ try {
     // Delete the temporary file
     fs.unlinkSync(path.join(process.cwd(), 'src', 'index.original.css'));
     console.log('Original index.css restored successfully!');
+  }
+
+  // Restore the original App.jsx file if it was modified
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.original.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.original.jsx'),
+      path.join(process.cwd(), 'src', 'App.jsx')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'App.original.jsx'));
+    console.log('Original App.jsx restored successfully!');
+  }
+
+  // Restore the original App.css file if it was modified
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.original.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'App.original.css'),
+      path.join(process.cwd(), 'src', 'App.css')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'App.original.css'));
+    console.log('Original App.css restored successfully!');
+  }
+
+  // Restore the original main.jsx file if it was modified
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.original.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'main.original.jsx'),
+      path.join(process.cwd(), 'src', 'main.jsx')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'main.original.jsx'));
+    console.log('Original main.jsx restored successfully!');
   }
 
   // Restore the original index.html file if it was modified
