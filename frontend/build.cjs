@@ -31,67 +31,69 @@ try {
 // Install specific dependencies that might be causing issues
 try {
   console.log('Installing specific dependencies...');
-  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 postcss@8.4.31 --save', { stdio: 'inherit' });
+  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 react-hot-toast@2.4.1 postcss@8.4.31 react-split-pane@0.1.92 recharts@2.10.3 --save', { stdio: 'inherit' });
   console.log('Dependencies installed successfully!');
 } catch (error) {
   console.error('Dependency installation failed:', error.message);
   // Continue anyway
 }
 
-// Create a temporary entry point for testing
+// Skip using simplified files for production build
 try {
-  console.log('Creating temporary entry point...');
-  // Rename the main.jsx file to main.original.jsx
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.jsx'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'main.jsx'),
-      path.join(process.cwd(), 'src', 'main.original.jsx')
-    );
-  }
+  console.log('Preparing for production build...');
 
-  // Copy the simplified main.jsx file to main.jsx
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.simple.jsx'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'main.simple.jsx'),
-      path.join(process.cwd(), 'src', 'main.jsx')
-    );
-  }
-
-  // Rename the index.css file to index.original.css
+  // Create a backup of the index.css file if it contains Tailwind imports
   if (fs.existsSync(path.join(process.cwd(), 'src', 'index.css'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'index.css'),
-      path.join(process.cwd(), 'src', 'index.original.css')
-    );
+    const indexCssContent = fs.readFileSync(path.join(process.cwd(), 'src', 'index.css'), 'utf8');
+
+    // Check if the file contains Tailwind imports
+    if (indexCssContent.includes('@import "tailwindcss"')) {
+      console.log('Detected Tailwind imports in index.css, creating a modified version...');
+
+      // Create a modified version without Tailwind imports
+      const modifiedContent = indexCssContent.replace(/@import\s+"tailwindcss".*;?/g, '');
+
+      // Backup the original file
+      fs.copyFileSync(
+        path.join(process.cwd(), 'src', 'index.css'),
+        path.join(process.cwd(), 'src', 'index.original.css')
+      );
+
+      // Write the modified content
+      fs.writeFileSync(path.join(process.cwd(), 'src', 'index.css'), modifiedContent);
+
+      console.log('Modified index.css created successfully!');
+    }
   }
 
-  // Copy the simplified index.css file to index.css
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'index.simple.css'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'index.simple.css'),
-      path.join(process.cwd(), 'src', 'index.css')
-    );
-  }
-
-  // Rename the App.css file to App.original.css
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.css'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'App.css'),
-      path.join(process.cwd(), 'src', 'App.original.css')
-    );
-  }
-
-  // Copy the simplified App.css file to App.css
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.simple.css'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'App.simple.css'),
-      path.join(process.cwd(), 'src', 'App.css')
-    );
-  }
-
-  console.log('Temporary entry point created successfully!');
+  console.log('Production build preparation completed!');
 } catch (error) {
-  console.error('Failed to create temporary entry point:', error.message);
+  console.error('Failed to prepare for production build:', error.message);
+  // Continue anyway
+}
+
+// Copy the custom index.html file to the root directory
+try {
+  console.log('Copying custom index.html...');
+  if (fs.existsSync(path.join(process.cwd(), 'custom-index.html'))) {
+    // Backup the original index.html file
+    if (fs.existsSync(path.join(process.cwd(), 'index.html'))) {
+      fs.copyFileSync(
+        path.join(process.cwd(), 'index.html'),
+        path.join(process.cwd(), 'index.original.html')
+      );
+    }
+
+    // Copy the custom index.html file to index.html
+    fs.copyFileSync(
+      path.join(process.cwd(), 'custom-index.html'),
+      path.join(process.cwd(), 'index.html')
+    );
+
+    console.log('Custom index.html copied successfully!');
+  }
+} catch (error) {
+  console.error('Failed to copy custom index.html:', error.message);
   // Continue anyway
 }
 
@@ -124,17 +126,7 @@ try {
 try {
   console.log('Restoring original files...');
 
-  // Restore the original main.jsx file
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.original.jsx'))) {
-    fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'main.original.jsx'),
-      path.join(process.cwd(), 'src', 'main.jsx')
-    );
-    // Delete the temporary file
-    fs.unlinkSync(path.join(process.cwd(), 'src', 'main.original.jsx'));
-  }
-
-  // Restore the original index.css file
+  // Restore the original index.css file if it was modified
   if (fs.existsSync(path.join(process.cwd(), 'src', 'index.original.css'))) {
     fs.copyFileSync(
       path.join(process.cwd(), 'src', 'index.original.css'),
@@ -142,19 +134,21 @@ try {
     );
     // Delete the temporary file
     fs.unlinkSync(path.join(process.cwd(), 'src', 'index.original.css'));
+    console.log('Original index.css restored successfully!');
   }
 
-  // Restore the original App.css file
-  if (fs.existsSync(path.join(process.cwd(), 'src', 'App.original.css'))) {
+  // Restore the original index.html file if it was modified
+  if (fs.existsSync(path.join(process.cwd(), 'index.original.html'))) {
     fs.copyFileSync(
-      path.join(process.cwd(), 'src', 'App.original.css'),
-      path.join(process.cwd(), 'src', 'App.css')
+      path.join(process.cwd(), 'index.original.html'),
+      path.join(process.cwd(), 'index.html')
     );
     // Delete the temporary file
-    fs.unlinkSync(path.join(process.cwd(), 'src', 'App.original.css'));
+    fs.unlinkSync(path.join(process.cwd(), 'index.original.html'));
+    console.log('Original index.html restored successfully!');
   }
 
-  console.log('Original files restored successfully!');
+  console.log('File restoration completed!');
 } catch (error) {
   console.error('Failed to restore original files:', error.message);
   // Continue anyway
