@@ -21,8 +21,16 @@ module.exports = {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['react-hot-toast', 'react-split-pane', 'recharts'],
+          ui: ['react-split-pane', 'recharts'],
         },
+      },
+    },
+  },
+  css: {
+    postcss: './postcss.config.cjs',
+    preprocessorOptions: {
+      scss: {
+        additionalData: '',
       },
     },
   },

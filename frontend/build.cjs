@@ -31,7 +31,7 @@ try {
 // Install specific dependencies that might be causing issues
 try {
   console.log('Installing specific dependencies...');
-  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 --save', { stdio: 'inherit' });
+  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 postcss@8.4.31 --save', { stdio: 'inherit' });
   console.log('Dependencies installed successfully!');
 } catch (error) {
   console.error('Dependency installation failed:', error.message);
@@ -54,6 +54,22 @@ try {
     fs.copyFileSync(
       path.join(process.cwd(), 'src', 'main.simple.jsx'),
       path.join(process.cwd(), 'src', 'main.jsx')
+    );
+  }
+
+  // Rename the index.css file to index.original.css
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'index.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'index.css'),
+      path.join(process.cwd(), 'src', 'index.original.css')
+    );
+  }
+
+  // Copy the simplified index.css file to index.css
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'index.simple.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'index.simple.css'),
+      path.join(process.cwd(), 'src', 'index.css')
     );
   }
 
@@ -86,6 +102,36 @@ try {
   }
 } catch (error) {
   console.error('Error checking dist directory:', error.message);
+}
+
+// Restore original files
+try {
+  console.log('Restoring original files...');
+
+  // Restore the original main.jsx file
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.original.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'main.original.jsx'),
+      path.join(process.cwd(), 'src', 'main.jsx')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'main.original.jsx'));
+  }
+
+  // Restore the original index.css file
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'index.original.css'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'index.original.css'),
+      path.join(process.cwd(), 'src', 'index.css')
+    );
+    // Delete the temporary file
+    fs.unlinkSync(path.join(process.cwd(), 'src', 'index.original.css'));
+  }
+
+  console.log('Original files restored successfully!');
+} catch (error) {
+  console.error('Failed to restore original files:', error.message);
+  // Continue anyway
 }
 
 console.log('Build script completed!');
