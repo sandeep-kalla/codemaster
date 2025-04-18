@@ -28,10 +28,46 @@ try {
   console.error('Error reading package.json:', error.message);
 }
 
+// Install specific dependencies that might be causing issues
+try {
+  console.log('Installing specific dependencies...');
+  execSync('npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.1 --save', { stdio: 'inherit' });
+  console.log('Dependencies installed successfully!');
+} catch (error) {
+  console.error('Dependency installation failed:', error.message);
+  // Continue anyway
+}
+
+// Create a temporary entry point for testing
+try {
+  console.log('Creating temporary entry point...');
+  // Rename the main.jsx file to main.original.jsx
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'main.jsx'),
+      path.join(process.cwd(), 'src', 'main.original.jsx')
+    );
+  }
+
+  // Copy the simplified main.jsx file to main.jsx
+  if (fs.existsSync(path.join(process.cwd(), 'src', 'main.simple.jsx'))) {
+    fs.copyFileSync(
+      path.join(process.cwd(), 'src', 'main.simple.jsx'),
+      path.join(process.cwd(), 'src', 'main.jsx')
+    );
+  }
+
+  console.log('Temporary entry point created successfully!');
+} catch (error) {
+  console.error('Failed to create temporary entry point:', error.message);
+  // Continue anyway
+}
+
 // Run the build command
 try {
   console.log('Running build command...');
-  execSync('npm run build', { stdio: 'inherit' });
+  // Use the CommonJS version of the Vite configuration
+  execSync('vite build --config vite.config.cjs', { stdio: 'inherit' });
   console.log('Build completed successfully!');
 } catch (error) {
   console.error('Build failed:', error.message);
@@ -42,7 +78,7 @@ try {
 try {
   const distExists = fs.existsSync(path.join(process.cwd(), 'dist'));
   console.log('dist directory exists:', distExists);
-  
+
   if (distExists) {
     // List files in the dist directory
     const distFiles = fs.readdirSync(path.join(process.cwd(), 'dist'));

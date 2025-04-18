@@ -1,15 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-import { fileURLToPath } from 'url'
+// CommonJS version of the Vite configuration
+const { resolve } = require('path');
 
-// Get the current directory
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
-
-// https://vite.dev/config/
-export default defineConfig({
+module.exports = {
   plugins: [
-    react()
+    require('@vitejs/plugin-react')()
   ],
   resolve: {
     alias: {
@@ -40,4 +34,4 @@ export default defineConfig({
     strictPort: false,
     open: true
   }
-})
+};
